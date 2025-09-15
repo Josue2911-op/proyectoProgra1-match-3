@@ -54,4 +54,6 @@ public:
 	void gravity();
 	void show(sf::RenderWindow& window);
 	//sf::Vector2i posMouse(sf::RenderWindow window);
+	void updateSprites();
+	void resetPoints();
 };

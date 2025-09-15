@@ -31,16 +31,9 @@ bool Game::replacePlace(sf::Vector2i pos) {
 			temp1 = m->getMatrix(firstClick.y, firstClick.x);
 			m->getMatrix(firstClick.y, firstClick.x) = m->getMatrix(secondClick.y, secondClick.x);
 			m->getMatrix(secondClick.y, secondClick.x) = temp1;
-			//ahora matriz de fotos.
-
-			temp2 = m->getMatrixx(firstClick.y, firstClick.x);
-			m->getMatrixx(firstClick.y, firstClick.x) = m->getMatrixx(secondClick.y, secondClick.x);
-			m->getMatrixx(secondClick.y, secondClick.x) = temp2;
-
-			//cambiamos las fotos de lugar
-			m->getMatrixx(firstClick.y, firstClick.x).setPosition(firstClick.x * 64.f, firstClick.y * 64.f);
-			m->getMatrixx(secondClick.y, secondClick.x).setPosition(secondClick.x * 64.f, secondClick.y * 64.f);
+			
 			if (m->deleteHorizontal() || m->deleteVertical()) {
+				m->gravity();
 				moved = true;
 			}
 			else {// si no se cumple pues vuelven a su lugar haciendo el mismo proceso pero al reves.
@@ -48,13 +41,6 @@ bool Game::replacePlace(sf::Vector2i pos) {
 				//logica de intercambio pero a la inversa en matriz de int.
 				m->getMatrix(secondClick.y, secondClick.x) = m->getMatrix(firstClick.y, firstClick.x);
 				m->getMatrix(firstClick.y, firstClick.x) = temp1;
-				// intercambio en matriz de fotos.
-				m->getMatrixx(secondClick.y, secondClick.x) = m->getMatrixx(firstClick.y, firstClick.x);
-				m->getMatrixx(firstClick.y, firstClick.x) = temp2;
-				//posicion original de las fotos.
-
-				m->getMatrixx(secondClick.y, secondClick.x).setPosition(secondClick.x * 64.f, secondClick.y * 64.f);
-				m->getMatrixx(firstClick.y, firstClick.x).setPosition(firstClick.x * 64.f, firstClick.y * 64.f);
 				moved = false;
 			}
 		}countClicks = 0;

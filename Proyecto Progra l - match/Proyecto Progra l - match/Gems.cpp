@@ -19,5 +19,6 @@ void Gems::createImages() {
 	}
 	for (int i = 0; i < 5; ++i) {
 		fruitsImages[i].setTexture(textures[i]);
+
 	}
 }

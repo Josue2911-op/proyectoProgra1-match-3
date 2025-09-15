@@ -73,6 +73,9 @@ bool endWindow() {
                     return false;
                 }
                 if (textRestart.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
+                    p->fullMatrix();
+                    p->resetPoints();
+                    g->reset();
                     windowEnd.close();
                     return true;
                 }
@@ -97,29 +100,29 @@ int main() {
         sf::RenderWindow window(sf::VideoMode(800, 600), "Match-3");
         g->reset();
         p->fullMatrix();
-        while (window.isOpen()) {  
+        while (window.isOpen()) {
             bool moved = false;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed) {
                     window.close();
                 }
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                  sf::Vector2i pos=  g->posMouse(window);
-                  moved = g->replacePlace(pos);
-				
+                    sf::Vector2i pos = g->posMouse(window);
+                    moved = g->replacePlace(pos);
+
                 }
             }
-            window.clear();
-            p->show(window);
-          
-                bool check = true;
-                while (check) {
-                    check = false;
-                    if (p->deleteVertical() || p->deleteHorizontal()) {
-                        check = true;
-                        p->gravity();
-                    }
+
+            bool check = true;
+            while (check) {
+                check = false;
+                if (p->deleteVertical() || p->deleteHorizontal()) {
+                    check = true;
+                    p->gravity();
                 }
+            }
+             window.clear();
+            p->show(window);
             window.draw(g->yourScore());
             window.draw(g->yourMoves(moved));
             window.display();

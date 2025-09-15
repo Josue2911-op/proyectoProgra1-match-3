@@ -4,6 +4,7 @@
 #include "Board.h"
 class Game {
 private:
+	Gems* fruits;
 	Board* m=nullptr;
 	int moves;
 	int score;
@@ -20,7 +21,8 @@ private:
 public:
 	Game(Board* board){
 		in1 = 0;
-		in2 = 0;	
+		in2 = 0;
+		fruits = new Gems();
 		temp1 = 0;
 		countClicks = 0;
 		m = board;

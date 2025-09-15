@@ -11,7 +11,7 @@ void Board::fullMatrix() {
 		{
 			int type = rand() % 5;
 			matrix[i][j] = type;
-			matrixx[i][j] = fruits->getFruitsImages(type);
+			matrixx[i][j].setTexture(fruits->getTexture(type));
 			matrixx[i][j].setPosition(j * 64.f, i * 64.f);
 			matrixx[i][j].setScale(0.1f, 0.1f);
 			
@@ -33,8 +33,10 @@ bool Board::deleteVertical() {
 				if (counter >= 3) {
 					for (int u = 0; u < counter; u++)
 					{
-						matrix[(i - 1) - u][j] = -1;
-						//matrixx[(i - 1) - u][j].setColor(sf::Color::Transparent);
+						int indexDelete = (i - 1) - u;
+						matrix[indexDelete][j] = -1;
+					//	matrixx[indexDelete][j].setTexture(sf::Texture());
+						matrixx[indexDelete][j].setColor(sf::Color::Transparent);
 					}
 					deleted = true;
 					points += 10 * counter;
@@ -46,6 +48,8 @@ bool Board::deleteVertical() {
 			for (int k = 0; k < counter; k++)
 			{
 				matrix[7 - k][j] = -1;
+				//matrixx[7 - k][j].setTexture(sf::Texture());
+				matrixx[7 - k][j].setColor(sf::Color::Transparent);
 				
 			}deleted = true;
 			points += 10 * counter;
@@ -68,8 +72,8 @@ bool Board::deleteHorizontal() {
 			else {
 				if (counter >= 3) {
 					for (int v = 0; v < counter; v++) {
-						matrix[i][(j - 1) - v] = -1;
-					//	matrixx[i][(j - 1) - v].setColor(sf::Color::Transparent);
+						int indexDelete = (j - 1) - v;
+						matrix[i][indexDelete] = -1;
 					}deleted = true;
 					points += 10 * counter;
 					
@@ -80,7 +84,6 @@ bool Board::deleteHorizontal() {
 			for (int b = 0; b < counter; b++)
 			{
 				matrix[i][7 - b]=-1;
-		
 			}deleted = true;
 			points += 10 * counter;
 		
@@ -99,41 +102,48 @@ void Board :: show(sf::RenderWindow& window){
 		}
 	}
 }
+void Board::updateSprites() {
+	for (size_t i = 0; i < 8; i++)
+	{
+		for (size_t j = 0; j < 8; j++)
+		{
+			int val = matrix[i][j];
+			if (val >= 0) {
+				matrixx[i][j].setTexture(fruits->getTexture(val));
+				matrixx[i][j].setColor(sf::Color::White);
+				matrixx[i][j].setPosition(j * 64.f, i * 64.f);
+				matrixx[i][j].setScale(0.1f, 0.1f);
+			}
+			else {
+				matrixx[i][j].setColor(sf::Color::Transparent);
+			}
+		}
+	}
+}
 void Board::gravity(){
 		
 		for (int j = 0; j < 8; j++)
 		{
-			for (int i = 7; i > 0; i--)
+			int empty = 7;
+			for (int i = 7; i >= 0; i--)
 			{
-				int k = i - 1;
-				if (matrix[i][j] == -1)
+				if (matrix[i][j] != -1)
 				{
-					while(k>=0 &&matrix[k][j]==-1){
-						k--;
-					}
-					if (k >= 0) {
-						matrix[i][j] = matrix[k][j];
-						matrixx[i][j] = fruits->getFruitsImages(matrix[i][j]);
-						matrixx[i][j].setColor(sf::Color::White);
-						matrixx[i][j].setScale(0.1f, 0.1f);
-						matrixx[i][j].setPosition(j * 64.f, i * 64.f);
-					
-						matrix[k][j] = -1;
-					}
-					else {
-						int typeGrav = rand() % 5;
-						matrix[i][j] = typeGrav;
-						matrixx[i][j] = fruits->getFruitsImages(typeGrav);
-						matrixx[i][j].setColor(sf::Color::White);
-						matrixx[i][j].setPosition(j * 64.f, i * 64.f);
-						matrixx[i][j].setScale(0.1f, 0.1f);
-						
-
-					}
+					if (empty != i) {
+						matrix[empty][j] = matrix[i][j];
+						matrix[i][j] = -1;
+					}empty--;
 				}
-
 			}
-		
+			for (int e = empty; e >= 0; e--) {
+				matrix[e][j]  = rand() % 5;
+			}
+					
 		}
+		updateSprites();
 }
+void Board:: resetPoints() {
+	points = 0;
+}
+
 

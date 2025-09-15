@@ -14,13 +14,8 @@ public:
 		
 		fruitsImages = new sf::Sprite [5];
 	}
-	sf::Sprite& getFruitsImages(int index) {
-		sf::Sprite tr;
-		tr.setTexture(textures[index]);
-		tr.setColor(sf::Color::White);
-		tr.setScale(0.1f, 0.1f);
-		return tr;
-		
+	sf::Texture& getTexture(int index) {
+		return textures[index];
 	}
 	void createImages();
 };
