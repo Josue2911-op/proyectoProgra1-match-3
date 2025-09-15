@@ -1,0 +1,129 @@
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include "Board.h"
+#include "Game.h"
+Board* p = new Board();
+Game* g = new Game(p);
+using namespace std;
+void startWindow() {
+    sf::RenderWindow window2(sf::VideoMode(800, 600), "Match-3 Start");
+    sf::Text textStart;
+	sf::Font fontStart;
+	fontStart.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+    textStart.setFont(fontStart);
+    textStart.setString("START");
+    textStart.setCharacterSize(50);
+    textStart.setFillColor(sf::Color::White);
+	textStart.setPosition(350, 250);
+    while (window2.isOpen()) {
+        sf::Event event2;
+        while (window2.pollEvent(event2)) {
+            if (event2.type == sf::Event::Closed) {
+                window2.close();
+            }
+            if (event2.type == sf::Event::MouseButtonPressed && event2.mouseButton.button== sf::Mouse::Left) {
+                sf::Vector2i mouse2 = sf::Mouse::getPosition(window2);
+                if (textStart.getGlobalBounds().contains(mouse2.x, mouse2.y)) {
+                    window2.close();
+                }
+            }
+        }
+        window2.clear();
+        window2.draw(textStart);
+        window2.display();
+    }
+}//copie y pegue lo de arriba para ahorrar tiempo ya que es casi lo mismo
+
+bool endWindow() {
+    sf::RenderWindow windowEnd(sf::VideoMode(800, 600), "End screen");
+    sf::Text textScore;
+    sf::Text textRestart;
+    sf::Text textEnd;
+    sf::Font fontEnd;
+    fontEnd.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+	//boton restart
+    textRestart.setFont(fontEnd);
+    textRestart.setString("Restart");
+    textRestart.setCharacterSize(20);
+    textRestart.setFillColor(sf::Color::White);
+    textRestart.setPosition(350, 200);
+	//boton score
+    textScore.setFont(fontEnd);
+    textScore.setString("Final score: " + to_string(g->getFinalScore()));
+    textScore.setCharacterSize(20);
+    textScore.setFillColor(sf::Color::White);
+	textScore.setPosition(350, 300);
+    //boton para terminar
+    textEnd.setFont(fontEnd);
+    textEnd.setString("End game");
+    textEnd.setCharacterSize(20);
+    textEnd.setFillColor(sf::Color::White);
+    textEnd.setPosition(350, 250);
+
+    while (windowEnd.isOpen()) {
+        sf::Event event3;
+        while (windowEnd.pollEvent(event3)) {
+            if (event3.type == sf::Event::Closed) {
+                windowEnd.close();
+            }
+            if (event3.type == sf::Event::MouseButtonPressed && event3.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2i mouse3 = sf::Mouse::getPosition(windowEnd);
+                if (textEnd.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
+                    windowEnd.close();
+                    return false;
+                }
+                if (textRestart.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
+                    windowEnd.close();
+                    return true;
+                }
+            }
+        }
+        windowEnd.clear();
+        windowEnd.draw(textRestart);
+        windowEnd.draw(textScore);
+        windowEnd.draw(textEnd);
+        windowEnd.display();
+    }
+    return false;
+}
+
+
+int main() {
+   
+    bool restart = true;
+    while (restart) {
+		startWindow();
+        sf::Event event;
+        sf::RenderWindow window(sf::VideoMode(800, 600), "Match-3");
+        g->reset();
+        p->fullMatrix();
+        while (window.isOpen()) {  
+            bool moved = false;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                  sf::Vector2i pos=  g->posMouse(window);
+                  moved = g->replacePlace(pos);
+				
+                }
+            }
+            window.clear();
+            p->show(window);
+                if (p->deleteVertical() || p->deleteHorizontal()) {
+                    p->gravity();
+                }
+           
+            window.draw(g->yourScore());
+            window.draw(g->yourMoves(moved));
+            window.display();
+            if(g->getMoves()==0){
+				window.close();
+			}
+        }
+        restart = endWindow();
+    } 
+  
+        return 0;
+}
