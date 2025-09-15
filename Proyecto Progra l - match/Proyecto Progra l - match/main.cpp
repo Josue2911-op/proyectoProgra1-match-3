@@ -111,10 +111,15 @@ int main() {
             }
             window.clear();
             p->show(window);
-                if (p->deleteVertical() || p->deleteHorizontal()) {
-                    p->gravity();
+          
+                bool check = true;
+                while (check) {
+                    check = false;
+                    if (p->deleteVertical() || p->deleteHorizontal()) {
+                        check = true;
+                        p->gravity();
+                    }
                 }
-           
             window.draw(g->yourScore());
             window.draw(g->yourMoves(moved));
             window.display();
