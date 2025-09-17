@@ -23,8 +23,8 @@ void startWindow() {
             }
             if (event2.type == sf::Event::MouseButtonPressed && event2.mouseButton.button== sf::Mouse::Left) {
                 sf::Vector2i mouse2 = sf::Mouse::getPosition(window2);
-                if (textStart.getGlobalBounds().contains(mouse2.x, mouse2.y)) {
-                    window2.close();
+                if (textStart.getGlobalBounds().contains(mouse2.x, mouse2.y)) { //si se preciona start en la hitbox con click izzquierdo, la ventana cierra 
+                    window2.close();                                               // y empieza el juego 
                 }
             }
         }
@@ -67,13 +67,13 @@ bool endWindow() {
                 windowEnd.close();
             }
             if (event3.type == sf::Event::MouseButtonPressed && event3.mouseButton.button == sf::Mouse::Left) {
-                sf::Vector2i mouse3 = sf::Mouse::getPosition(windowEnd);
-                if (textEnd.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
-                    windowEnd.close();
+                sf::Vector2i mouse3 = sf::Mouse::getPosition(windowEnd);//posicion X y Y del mouse en la ventana
+                if (textEnd.getGlobalBounds().contains(mouse3.x, mouse3.y)) {// si se presiona end game en la hitbox de ese texto con el click izquierdo
+                    windowEnd.close(); //la ventana se cierra y el main termina retornando false, por ende termina el programa garacias while(restart)
                     return false;
                 }
-                if (textRestart.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
-                    p->fullMatrix();
+                if (textRestart.getGlobalBounds().contains(mouse3.x, mouse3.y)) {// si preciona en restart en la hitbox con click izquierdo
+                    p->fullMatrix();                                              // se reinicia la matriz, los puntos y movimientos
                     p->resetPoints();
                     g->reset();
                     windowEnd.close();
@@ -89,13 +89,11 @@ bool endWindow() {
     }
     return false;
 }
-
-
 int main() {
-   
+
     bool restart = true;
     while (restart) {
-		startWindow();
+        startWindow();
         sf::Event event;
         sf::RenderWindow window(sf::VideoMode(800, 600), "Match-3");
         g->reset();
@@ -114,24 +112,26 @@ int main() {
             }
 
             bool check = true;
-            while (check) {
+            while (check) {//mientras se puedan eliminar se sigue haciendo la gravedad
                 check = false;
                 if (p->deleteVertical() || p->deleteHorizontal()) {
                     check = true;
                     p->gravity();
                 }
             }
-             window.clear();
+            window.clear();
             p->show(window);
             window.draw(g->yourScore());
             window.draw(g->yourMoves(moved));
             window.display();
-            if(g->getMoves()==0){
-				window.close();
-			}
+            if (g->getMoves() == 0) {
+                window.close();
+            }
         }
         restart = endWindow();
-    } 
-  
-        return 0;
+    }
+
+    return 0;
+    delete p;
+    delete g;
 }

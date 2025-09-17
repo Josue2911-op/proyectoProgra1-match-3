@@ -4,10 +4,10 @@ sf::Vector2i Game::posMouse(sf::RenderWindow& window) {
 	in1 = mouse.x / 64;// dividido entre 64 para estar en la matriz de las fotos
 	in2 = mouse.y / 64;
 	if (in1 >= 0 && in1 < 8 && in2 >= 0 && in2 < 8) {
-		return { in1,in2 };
+		return { in1,in2 };//devuelve la posicion en la matriz
 	}
 	else {
-		return{ -1,-1 };
+		return{ -1,-1 };//esá afuera de la matriz, no se hace nada 
 	}
 
 }
@@ -20,20 +20,21 @@ bool Game::replacePlace(sf::Vector2i pos) {
 		return false;
 	}
 	if (countClicks == 0) {
-		firstClick = { pos };
+		firstClick = { pos };//guarda la posicion del primer click
 		countClicks++;
 	}
 	else if (countClicks == 1) {
-		secondClick = { pos };
+		secondClick = { pos };//guarda el segundo click
 
+		/*abs para ver si estan adyacentes,si la diferencia de "x" y "y" es de 1, manejando verticales y horizontales */
 		if (abs(firstClick.x - secondClick.x) == 1 && firstClick.y == secondClick.y  || abs(firstClick.y - secondClick.y) == 1 && firstClick.x == secondClick.x ) {
 			//intercambio logica que utilizamos en una matriz de int.
 			temp1 = m->getMatrix(firstClick.y, firstClick.x);
 			m->getMatrix(firstClick.y, firstClick.x) = m->getMatrix(secondClick.y, secondClick.x);
 			m->getMatrix(secondClick.y, secondClick.x) = temp1;
 			
-			if (m->deleteHorizontal() || m->deleteVertical()) {
-				m->gravity();
+			if (m->deleteHorizontal() || m->deleteVertical()) {// si se cumple alguna de las condiciones de eliminacion se deja asi y se aplica la gravedad
+				m->gravity();//actualizando la matriz de sprites y la de int
 				moved = true;
 			}
 			else {// si no se cumple pues vuelven a su lugar haciendo el mismo proceso pero al reves.

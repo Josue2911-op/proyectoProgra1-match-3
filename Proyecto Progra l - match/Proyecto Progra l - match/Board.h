@@ -45,7 +45,8 @@ public:
 	int getScore() {
 		return points;
 	}
-	sf::Sprite& getMatrixx(int i, int j) {
+	sf::Sprite& getMatrixx(int i, int j) {// get matrix para usarla en Game.cpp en replacePlace, recibiendo las 2 matrices de enteros y sprites
+											//para hacer el intercambio de posiciones y se validen las eliminaciones en las matrices originales
 		return matrixx[i][j];
 	}
 	int& getMatrix(int i, int j) {
@@ -53,7 +54,17 @@ public:
 	}
 	void gravity();
 	void show(sf::RenderWindow& window);
-	//sf::Vector2i posMouse(sf::RenderWindow window);
 	void updateSprites();
 	void resetPoints();
+
+	~Board() {
+		delete fruits;
+		for (int i = 0; i < 8; i++) {
+			delete matrixx[i];
+		}delete[]matrixx;
+		for (int i = 0; i < 8; i++) {
+				delete matrix[i];
+		} delete[]matrix;
+		
+	}
 };

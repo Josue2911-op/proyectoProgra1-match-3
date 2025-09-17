@@ -38,4 +38,8 @@ public:
 	int getFinalScore();
 	int getMoves();
 	void reset();
+	~Game()
+	{
+		delete fruits;
+	}
 };
