@@ -1,7 +1,8 @@
 #include "Game.h"
-sf::Vector2i Game::posMouse(sf::RenderWindow& window) {
+sf::Vector2i Game::posMouse(sf::RenderWindow& window) {// el & es para pasar la referencia de la ventana y no una copia
+	                                                    //por ende estamos trabajando con la misma ventana
 	sf::Vector2i mouse = sf::Mouse::getPosition(window);
-	in1 = mouse.x / 64;// dividido entre 64 para estar en la matriz de las fotos
+	in1 = mouse.x / 64;// dividido entre 64 para estar en la matriz de las fotos, por ejemolo pos (150,300), 150/64= 2 "columna 2" y lo mismo con y
 	in2 = mouse.y / 64;
 	if (in1 >= 0 && in1 < 8 && in2 >= 0 && in2 < 8) {
 		return { in1,in2 };//devuelve la posicion en la matriz

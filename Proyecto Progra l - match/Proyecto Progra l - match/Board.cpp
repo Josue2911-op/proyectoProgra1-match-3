@@ -116,13 +116,14 @@ void Board::updateSprites() {//actualiza las posiciones de los sprites en la mat
 	}
 }
 void Board::gravity(){
-		//recorre columna por columna
+		//recorre columna por columna de abajo hacia arriba
 		for (int j = 0; j < 8; j++)
 		{
-			int empty = 7;
+			int empty = 7;// empieza en la ultima fila
 			for (int i = 7; i >= 0; i--)
 			{
-				if (matrix[i][j] != -1)
+				if (matrix[i][j] != -1)//si la posicion no hay -1 y si empty es diferente de i, se mueve el valor a la posicion empty
+										//e i se vuelve -1, luego empty decrementa
 				{
 					if (empty != i) {
 						matrix[empty][j] = matrix[i][j];
@@ -130,7 +131,7 @@ void Board::gravity(){
 					}empty--;
 				}
 			}
-			for (int e = empty; e >= 0; e--) {
+			for (int e = empty; e >= 0; e--) {// una vez terminado los espacios vacios se llenan con numeros aleatorios 
 				matrix[e][j]  = rand() % 5;
 			}
 					
