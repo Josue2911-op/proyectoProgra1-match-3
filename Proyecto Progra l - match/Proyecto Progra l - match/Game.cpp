@@ -28,23 +28,57 @@ bool Game::replacePlace(sf::Vector2i pos) {
 		secondClick = { pos };//guarda el segundo click
 
 		/*abs para ver si estan adyacentes,si la diferencia de "x" y "y" es de 1, manejando verticales y horizontales */
-		if (abs(firstClick.x - secondClick.x) == 1 && firstClick.y == secondClick.y  || abs(firstClick.y - secondClick.y) == 1 && firstClick.x == secondClick.x ) {
+		if (abs(firstClick.x - secondClick.x) == 1 && firstClick.y == secondClick.y || abs(firstClick.y - secondClick.y) == 1 && firstClick.x == secondClick.x) {
 			//intercambio logica que utilizamos en una matriz de int.
+			if (m->getMatrix(firstClick.y, firstClick.x) == 5 || m->getMatrix(secondClick.y, secondClick.x) == 5) {
+				countClicks = 0;
+				return false;
+			}
 			temp1 = m->getMatrix(firstClick.y, firstClick.x);
 			m->getMatrix(firstClick.y, firstClick.x) = m->getMatrix(secondClick.y, secondClick.x);
 			m->getMatrix(secondClick.y, secondClick.x) = temp1;
-			
-			if (m->deleteHorizontal() || m->deleteVertical()) {// si se cumple alguna de las condiciones de eliminacion se deja asi y se aplica la gravedad
-				m->gravity();//actualizando la matriz de sprites y la de int
+
+			Gems* tempGem = m->getMatrixG(firstClick.y, firstClick.x);
+			m->getMatrixG(firstClick.y, firstClick.x) = m->getMatrixG(secondClick.y, secondClick.x);
+			m->getMatrixG(secondClick.y, secondClick.x) = tempGem;
+			bool check2 = true;
+
+			while (check2) {
+				check2 = false;
+				for (int i = 0; i < 8; i++)
+				{
+					for (int j = 0; j < 8; j++)
+					{
+						if (m->deleteHorizontal({ j,i }) || m->deleteVertical({ j,i })) {// si se cumple alguna de las condiciones de eliminacion se deja asi y se aplica la gravedad
+							check2 = true;
+							moved = true;
+						}
+					}
+				}if (check2) {
+					m->cleanDeletedSprites();
+					m->gravity();
+				}
+			}
+			Gems* gem = m->getMatrixG(firstClick.y, firstClick.x);
+			if (gem && m->getMatrix(firstClick.y, firstClick.x) == 6) {
+				gem->match(firstClick.y, firstClick.x, m->getMatrixReplace(), m->getMatrixxReplace(), m->getMatrixGForReplace());
+				m->cleanDeletedSprites();
+				m->gravity();
+				m->setPoints(m->getScore() + (8 + 8 - 1) * 10);
 				moved = true;
 			}
-			else {// si no se cumple pues vuelven a su lugar haciendo el mismo proceso pero al reves.
+			if(!moved) {// si no se cumple pues vuelven a su lugar haciendo el mismo proceso pero al reves.
 
-				//logica de intercambio pero a la inversa en matriz de int.
-				m->getMatrix(secondClick.y, secondClick.x) = m->getMatrix(firstClick.y, firstClick.x);
-				m->getMatrix(firstClick.y, firstClick.x) = temp1;
-				moved = false;
+						//logica de intercambio pero a la inversa en matriz de int.
+						m->getMatrix(secondClick.y, secondClick.x) = m->getMatrix(firstClick.y, firstClick.x);
+						m->getMatrix(firstClick.y, firstClick.x) = temp1;
+
+						m->getMatrixG(secondClick.y, secondClick.x) = m->getMatrixG(firstClick.y, firstClick.x);
+						m->getMatrixG(firstClick.y, firstClick.x) = tempGem;
+						
+						m->updateSprites();
 			}
+			
 		}countClicks = 0;
 		
 

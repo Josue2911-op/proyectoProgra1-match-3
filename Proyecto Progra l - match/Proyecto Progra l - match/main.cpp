@@ -110,11 +110,11 @@ int main() {
 
                 }
             }
-
+            sf::Vector2i lastMove = g->getMove();
             bool check = true;
             while (check) {//mientras se puedan eliminar se sigue haciendo la gravedad
                 check = false;
-                if (p->deleteVertical() || p->deleteHorizontal()) {
+                if (p->deleteVertical(lastMove) || p->deleteHorizontal(lastMove)) {
                     check = true;
                     p->gravity();
                 }

@@ -157,13 +157,19 @@ sfml-audio.lib</AdditionalDependencies>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gems.cpp" />
+    <ClCompile Include="IceGem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="normalGem.cpp" />
+    <ClCompile Include="PowerGem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gems.h" />
+    <ClInclude Include="IceGem.h" />
+    <ClInclude Include="normalGem.h" />
+    <ClInclude Include="PowerGem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
