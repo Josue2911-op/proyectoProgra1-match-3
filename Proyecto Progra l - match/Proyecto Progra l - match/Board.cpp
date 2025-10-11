@@ -27,6 +27,7 @@ void Board::fullMatrix() {
 		}
 	}
 }
+
 void Board::createPowerGem(int i, int j) {
 	if (matrixG[i][j]) delete matrixG[i][j];
 	matrixG[i][j] = new PowerGem();
@@ -38,6 +39,7 @@ void Board::createPowerGem(int i, int j) {
 	spr.setColor(sf::Color::White);
 	matrixx[i][j] = spr;
 }
+
 bool Board::deleteVertical(sf::Vector2i pos) {
 	bool deleted = false;
 
@@ -46,7 +48,7 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 		int counter = 1;
 		for (int  i= 1; i  < 8; i++)
 		{
-			if ((matrix[i][j] == matrix[i - 1][j]||matrix[i][j]==5 || matrix[i - 1][j] == 5) && matrix[i][j] != -1) {//si el anterior es igual al actual y el valor no es -1 se suma contador
+			if (matrix[i][j] == matrix[i - 1][j] && matrix[i][j] != -1 && matrix[i][j] != 5 ) {//si el anterior es igual al actual y el valor no es -1 se suma contador
 				counter++;
 			}
 			else {//si la posicion actual es diferente a la anterior pero el contador es mayor o igual a 3 entonces se eliminan los 3 o mas anteriores
@@ -67,6 +69,13 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 						else {
 							matrix[p][j] = -1;
 						}
+					}
+					int right = segStart - 1;
+					int left = segEnd + 1;
+					if (right>=0 && right < 8 && matrix[right][j] == 5 && matrixG[right][j] != nullptr) {
+						matrixG[right][j]->match(right, j, matrix, matrixx, matrixG);
+					}if (left >= 0 && left < 8 && matrix[left][j] == 5 && matrixG[left][j] != nullptr) {
+						matrixG[left][j]->match(left, j, matrix, matrixx, matrixG);
 					}
 					deleted = true;
 					points += 10 * counter;
@@ -92,6 +101,13 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 					matrix[p][j] = -1;
 				}
 			}
+			int right = segStart - 1;
+			int left = segEnd + 1;
+			if (right >=0 && right < 8 && matrix[right][j] == 5 && matrixG[right][j] != nullptr) {
+				matrixG[right][j]->match(right, j, matrix, matrixx, matrixG);
+			}if (left >= 0 && left < 8 && matrix[left][j] == 5 && matrixG[left][j] != nullptr) {
+				matrixG[left][j]->match(left, j , matrix, matrixx, matrixG);
+			}
 			deleted = true;
 			points += 10 * counter;
 		}
@@ -104,7 +120,7 @@ bool Board::deleteHorizontal(sf::Vector2i movedPos) {
 	for (int i = 0; i < 8; i++) {
 		int counter = 1;
 		for (int j = 1; j < 8; j++) {
-			if ((matrix[i][j] == matrix[i][j - 1] || matrix[i][j] == 5 || matrix[i][j - 1] == 5) && matrix[i][j] != -1) {
+			if (matrix[i][j] == matrix[i][j - 1] && matrix[i][j] != -1 && matrix[i][j] != 5) {
 				counter++;
 			}
 			else {
@@ -122,10 +138,16 @@ bool Board::deleteHorizontal(sf::Vector2i movedPos) {
 						else if (matrixG[i][p] != nullptr) {
 							matrixG[i][p]->match(i, p, matrix, matrixx, matrixG);
 						}
-						else {matrix[i][p] = -1;
+						else { matrix[i][p] = -1;}
 					}
-						
+					int right = segStart-1;
+					int left = segEnd+1;
+					if (right >=0 && right < 8 && matrix[i][right] == 5 && matrixG[i][right] != nullptr) {
+						matrixG[i][right]->match(i, right, matrix, matrixx, matrixG);
+					}if (left >=0 && left < 8 && matrix[i][left] == 5 && matrixG[i][left] != nullptr) {
+						matrixG[i][left]->match(i, left, matrix, matrixx, matrixG);
 					}
+
 					deleted = true;
 					points += 10 * counter;
 				}
@@ -148,6 +170,13 @@ bool Board::deleteHorizontal(sf::Vector2i movedPos) {
 				}
 				else { matrix[i][p] = -1; }
 				
+			}
+			int right = segStart - 1;
+			int left = segEnd + 1;
+			if (right>=0 && right < 8 && matrix[i][right] == 5 && matrixG[i][right] != nullptr) {
+				matrixG[i][right]->match(i, right, matrix, matrixx, matrixG);
+			}if (left >= 0 && left < 8 && matrix[i][left] == 5 && matrixG[i][left] != nullptr) {
+				matrixG[i][left]->match(i, left, matrix, matrixx, matrixG);
 			}
 			deleted = true;
 			points += 10 * counter;
@@ -225,7 +254,7 @@ void Board::gravity(){
 			}
 			for (int e = empty; e >= 0; e--) {// una vez terminado los espacios vacios se llenan con numeros aleatorios 
 				
-				int type2	= rand() % 6;
+				int type2	= rand() % 5;
 				matrix[e][j] = type2;
 				if (matrixG[e][j] != nullptr) {
 				delete matrixG[e][j];

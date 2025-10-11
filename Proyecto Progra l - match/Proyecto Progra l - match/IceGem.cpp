@@ -3,7 +3,7 @@ void IceGem::match(int i, int j, int** matrix, sf::Sprite** matrixx,Gems***matri
 	if (hits > 0) {
 		hits--;
 	}
-	if (hits > 0) {
+	if (hits == 1) {
 			sprite.setTexture(Gems::textures[7]);
 			sprite.setScale(0.1f, 0.1f);
 			matrixx[i][j] = sprite;
