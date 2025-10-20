@@ -1,28 +1,33 @@
 #include "Gems.h"
 sf::Texture Gems::textures[8];
 void Gems::createImages() {
-
-	if (!textures[0].loadFromFile("gem1.png")) {//carga las texturas y las asigna a un arreglo en n posicion
-		cerr << "Error loading gem1 texture" << endl;
+	try {
+		if (!textures[0].loadFromFile("gem1.png")) {//carga las texturas y las asigna a un arreglo en n posicion
+			throw runtime_error("Error loading gem1 texture");
+		}
+		if (!textures[1].loadFromFile("gem2.png")) {
+			throw runtime_error("Error loading gem2 texture");
+		}
+		if (!textures[2].loadFromFile("gem3.png")) {
+			throw runtime_error("Error loading gem3 texture");
+		}
+		if (!textures[3].loadFromFile("gem4.png")) {
+			throw runtime_error("Error loading gem4 texture");
+		}
+		if (!textures[4].loadFromFile("gem5.png")) {
+			throw runtime_error("Error loading gem5 texture");
+		}if (!textures[5].loadFromFile("iceGem.png")) {
+			throw runtime_error("Error loading iceGem texture");
+		}
+		if (!textures[6].loadFromFile("powerGem.png")) {
+			throw runtime_error("Error loading powerGem texture");
+		}
+		if (!textures[7].loadFromFile("breakIce.png")) {
+			throw runtime_error("Error loading breakIce texture");
+		}
 	}
-	if (!textures[1].loadFromFile("gem2.png")) {
-		cerr << "Error loading gem2 texture" << endl;
-	}
-	if (!textures[2].loadFromFile("gem3.png")) {
-		cerr << "Error loading gem3 texture" << endl;
-	}
-	if (!textures[3].loadFromFile("gem4.png")) {
-		cerr << "Error loading gem4 texture" << endl;
-	}
-	if (!textures[4].loadFromFile("gem5.png")) {
-		cerr << "Error loading gem5 texture" << endl;
-	}if (!textures[5].loadFromFile("iceGem.png")) {
-		cerr << "Error loading iceGem texture" << endl;
-	}
-	if (!textures[6].loadFromFile("powerGem.png")) {
-		cerr << "Error loading powerGem texture" << endl;
-	}
-	if (!textures[7].loadFromFile("breakIce.png")) {
-		cerr << "Error loading breakIce texture" << endl;
+	catch (const exception& e) {
+		cerr << "Error en createImages: " << e.what() << endl;
+		exit(1);
 	}
 }

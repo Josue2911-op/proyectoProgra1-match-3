@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Board.h"
 #include "Game.h"
+//what() es un método de la clase std::exception (y sus derivadas) que devuelve un mensaje descriptivo del error.
 Board* p = new Board();
 Game* g = new Game(p);
 using namespace std;
@@ -9,7 +10,12 @@ void startWindow() {
     sf::RenderWindow window2(sf::VideoMode(800, 600), "Match-3 Start");
     sf::Text textStart;
 	sf::Font fontStart;
-	fontStart.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+    try {
+        fontStart.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+    }catch(const exception& e) {
+        cerr << "Error al cargar la fuente: " << e.what() << endl;
+        exit(1);
+	}
     textStart.setFont(fontStart);
     textStart.setString("START");
     textStart.setCharacterSize(50);
@@ -21,11 +27,17 @@ void startWindow() {
             if (event2.type == sf::Event::Closed) {
                 window2.close();
             }
-            if (event2.type == sf::Event::MouseButtonPressed && event2.mouseButton.button== sf::Mouse::Left) {
-                sf::Vector2i mouse2 = sf::Mouse::getPosition(window2);
-                if (textStart.getGlobalBounds().contains(mouse2.x, mouse2.y)) { //si se preciona start en la hitbox con click izzquierdo, la ventana cierra 
-                    window2.close();                                               // y empieza el juego 
+            try {
+                if (event2.type == sf::Event::MouseButtonPressed && event2.mouseButton.button == sf::Mouse::Left) {
+                    sf::Vector2i mouse2 = sf::Mouse::getPosition(window2);
+                    if (textStart.getGlobalBounds().contains(mouse2.x, mouse2.y)) { //si se preciona start en la hitbox con click izzquierdo, la ventana cierra 
+                        window2.close();                                               // y empieza el juego 
+                    }
                 }
+            }
+            catch (const exception& e) {
+				cerr << "Error en eventos del mouse: " << e.what() << endl;
+                exit(1);
             }
         }
         window2.clear();
@@ -43,8 +55,13 @@ bool endWindow() {
     sf::Text fail;
     sf::Text next;
     sf::Font fontEnd;
-
-    fontEnd.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+    try{
+        fontEnd.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+    }
+    catch (const exception& e) {
+        cerr << "Error al cargar la fuente: " << e.what() << endl;
+        exit(1);
+	}
     if (g->checkCompleted() && g->getCurrentLevel()<=3) {
         congrats.setFont(fontEnd);
         congrats.setString("Level Completed!!");
@@ -90,31 +107,38 @@ bool endWindow() {
         while (windowEnd.pollEvent(event3)) {
             if (event3.type == sf::Event::Closed) {
                 windowEnd.close();
+            }try{
+                if (event3.type == sf::Event::MouseButtonPressed && event3.mouseButton.button == sf::Mouse::Left) {
+                    sf::Vector2i mouse3 = sf::Mouse::getPosition(windowEnd);//posicion X y Y del mouse en la ventana
+                    if (textEnd.getGlobalBounds().contains(mouse3.x, mouse3.y)) {// si se presiona end game en la hitbox de ese texto con el click izquierdo
+                        windowEnd.close(); //la ventana se cierra y el main termina retornando false, por ende termina el programa garacias while(restart)
+                        return false;
+                    }
+                    if (g->checkCompleted() && g->getCurrentLevel() < 3 && next.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
+                        int level = g->getCurrentLevel() + 1;
+                        g->createDataLevel(level);
+                        p->fullMatrix();                                              // se reinicia la matriz, los puntos y movimientos
+                        p->resetPoints();
+                        g->reset();
+                        windowEnd.close();
+                        return true;
+                    }
+                    if (textRestart.getGlobalBounds().contains(mouse3.x, mouse3.y)) {// si preciona en restart en la hitbox con click izquierdo
+                        p->fullMatrix();                                              // se reinicia la matriz, los puntos y movimientos
+                        p->resetPoints();
+                        g->reset();
+                        windowEnd.close();
+                        return true;
+                    }
+                }
+              
             }
-            if (event3.type == sf::Event::MouseButtonPressed && event3.mouseButton.button == sf::Mouse::Left) {
-                sf::Vector2i mouse3 = sf::Mouse::getPosition(windowEnd);//posicion X y Y del mouse en la ventana
-                if (textEnd.getGlobalBounds().contains(mouse3.x, mouse3.y)) {// si se presiona end game en la hitbox de ese texto con el click izquierdo
-                    windowEnd.close(); //la ventana se cierra y el main termina retornando false, por ende termina el programa garacias while(restart)
-                    return false;
-                }
-                if (g->checkCompleted() && g->getCurrentLevel() < 3 && next.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
-					int level = g->getCurrentLevel()+1;
-					g->createDataLevel(level);
-                    p->fullMatrix();                                              // se reinicia la matriz, los puntos y movimientos
-                    p->resetPoints();
-                    g->reset();
-                    windowEnd.close();
-                    return true;
-                }
-                if (textRestart.getGlobalBounds().contains(mouse3.x, mouse3.y)) {// si preciona en restart en la hitbox con click izquierdo
-                    p->fullMatrix();                                              // se reinicia la matriz, los puntos y movimientos
-                    p->resetPoints();
-                    g->reset();
-                    windowEnd.close();
-                    return true;
-                }
+            catch (const exception& e) {
+                cerr << "Error en eventos del mouse: " << e.what() << endl;
+                exit(1);
             }
         }
+       
         windowEnd.clear();
 		windowEnd.draw(congrats);
 		windowEnd.draw(next);

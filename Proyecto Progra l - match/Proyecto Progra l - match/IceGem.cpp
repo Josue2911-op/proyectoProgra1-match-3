@@ -1,20 +1,27 @@
 #include "IceGem.h"
 #include "Board.h"
 void IceGem::match(int i, int j, int** matrix, sf::Sprite** matrixx,Gems***matrixG) {
-	if (hits > 0) {
-		hits--;
-	}
-	if (hits == 1) {
+	try {
+		if (hits > 0) {
+			hits--;
+		}
+		if (hits == 1) {
 			sprite.setTexture(Gems::textures[7]);
 			sprite.setScale(0.1f, 0.1f);
 			matrixx[i][j] = sprite;
-	}else{
-		matrix[i][j] = -1;
-		if (matrixG[i][j] != nullptr && !matrixG[i][j]->fading) {
-			matrixG[i][j]->fadeOut();
-			matrix[i][j] = -2;
-			Board::deleteIce++;
 		}
-	
+		else {
+			matrix[i][j] = -1;
+			if (matrixG[i][j] != nullptr && !matrixG[i][j]->fading) {
+				matrixG[i][j]->fadeOut();
+				matrix[i][j] = -2;
+				Board::deleteIce++;
+			}
+
+		}
+	}
+	catch (const exception& e) {
+		cerr << "Error en IceGem match: " << e.what() << endl;
+		exit(1);
 	}
 }

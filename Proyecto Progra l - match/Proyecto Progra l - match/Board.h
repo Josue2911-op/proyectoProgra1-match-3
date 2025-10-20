@@ -22,32 +22,37 @@ public:
 		deleteIce = 0;
 		deletePower = 0;
 		points = 0;
-		matrixG = new Gems **[8];
-		for (int i = 0; i < 8; i++)
-		{
-			matrixG[i] = new Gems*[8];
-		}
-	 Gems::createImages();
-		matrixx = new sf::Sprite*[8];
-		for (int i = 0; i < 8; i++)
-		{
-			matrixx[i] = new sf::Sprite[8];
-		}
-
-		matrix = new int * [8];
-
-		for (int i = 0; i < 8; i++)
-		{
-			matrix[i] = new int[8];
-		}
-		for (int i = 0; i < 8; i++)
-		{
-			for (int j = 0; j < 8; j++)
+		try {
+			matrixG = new Gems * *[8];
+			for (int i = 0; i < 8; i++)
 			{
-				matrix[i][j] = 0;
+				matrixG[i] = new Gems * [8];
+			}
+			Gems::createImages();
+			matrixx = new sf::Sprite * [8];
+			for (int i = 0; i < 8; i++)
+			{
+				matrixx[i] = new sf::Sprite[8];
+			}
+
+			matrix = new int* [8];
+
+			for (int i = 0; i < 8; i++)
+			{
+				matrix[i] = new int[8];
+			}
+			for (int i = 0; i < 8; i++)
+			{
+				for (int j = 0; j < 8; j++)
+				{
+					matrix[i][j] = 0;
+				}
 			}
 		}
-		
+		catch (const exception& e) {
+			cerr<<"Error al asignar memoria en el constructor: "<<e.what() << endl;
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	void fullMatrix();

@@ -4,7 +4,7 @@
 #include "Board.h"
 class Game {
 private:
-	Board* m=nullptr;
+	Board* m = nullptr;
 	int moves;
 	int score;
 	sf::Text textScore;
@@ -18,11 +18,11 @@ private:
 	int temp1;
 	sf::Sprite temp2;
 	int in1, in2;
-	int redTarget, iceObjective, powerTarget, scoreTarget, redCollected, iceCubeCollected,powerCollected;
+	int redTarget, iceObjective, powerTarget, scoreTarget, redCollected, iceCubeCollected, powerCollected;
 	int currentLevel;
 	string stri;
 public:
-	Game(Board* board){
+	Game(Board* board) {
 		stri = "";
 		redTarget = 0;
 		iceCubeCollected = 0;
@@ -39,8 +39,19 @@ public:
 		m = board;
 		moves = 20;
 		score = 0;
-		font.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
-		font2.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+		try {
+			font.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+		}
+		catch (const exception& e) {
+			cerr << "Error al cargar la fuente: " << e.what() << endl;
+		}
+
+		try {
+			font2.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+		}
+		catch (const exception& e) {
+			cerr << "Error al cargar la fuente:" << e.what() << endl;
+		}
 	}
 	sf::Vector2i posMouse(sf::RenderWindow& window);
 	bool replacePlace(sf::Vector2i pos);
