@@ -41,6 +41,12 @@ bool Game::replacePlace(sf::Vector2i pos) {
 			Gems* tempGem = m->getMatrixG(firstClick.y, firstClick.x);
 			m->getMatrixG(firstClick.y, firstClick.x) = m->getMatrixG(secondClick.y, secondClick.x);
 			m->getMatrixG(secondClick.y, secondClick.x) = tempGem;
+
+			if (m->getMatrixG(firstClick.y, firstClick.x)) {
+				m->getMatrixG(firstClick.y, firstClick.x)->targetPos = sf::Vector2f(firstClick.x * 64.f, firstClick.y * 64.f);
+			}
+			m->getMatrixG(secondClick.y, secondClick.x)->targetPos = sf::Vector2f(secondClick.x * 64.f, secondClick.y * 64.f);
+			
 			bool check2 = true;
 
 			while (check2) {
@@ -76,7 +82,12 @@ bool Game::replacePlace(sf::Vector2i pos) {
 						m->getMatrixG(secondClick.y, secondClick.x) = m->getMatrixG(firstClick.y, firstClick.x);
 						m->getMatrixG(firstClick.y, firstClick.x) = tempGem;
 						
-						m->updateSprites();
+						m->getMatrixG(firstClick.y, firstClick.x)->targetPos = sf::Vector2f(firstClick.x * 64.f, firstClick.y * 64.f);
+						m->getMatrixG(secondClick.y, secondClick.x)->targetPos = sf::Vector2f(secondClick.x * 64.f, secondClick.y * 64.f);
+					
+						m->getMatrixG(secondClick.y, secondClick.x)->targetPos = sf::Vector2f(secondClick.x * 64.f, secondClick.y * 64.f);
+						m->getMatrixG(firstClick.y, firstClick.x)->targetPos = sf::Vector2f(firstClick.x * 64.f, firstClick.y * 64.f);
+						
 			}
 			
 		}countClicks = 0;
@@ -89,7 +100,8 @@ sf::Text Game::yourMoves(bool moved) {
 	// esto va relacionado con lo que devuelva el metodo replacePlace
 	if (moves > 0 && moved) {
 			moves -= 1;
-	}				textMoves.setFont(font2);
+	}			
+	textMoves.setFont(font2);
 	textMoves.setString("Moves: " + to_string(moves));
 	textMoves.setCharacterSize(24);
 	textMoves.setFillColor(sf::Color::White);
@@ -107,6 +119,50 @@ sf::Text Game::yourScore(){
 	//hacer el text de sfml para mostrar el score y con un to_string(score) mostrarlo
 	// lo mismo con los moves
 }
+void Game::createDataLevel(int level) {
+	 currentLevel = level;
+	reset();
+	redColected = 0;
+	iceCubeColected = 0;
+	powerColected = 0;
+	switch (level) {
+	case 1:
+		redTarget = 0;
+		iceObjective = 0;
+		powerTarget = 0;
+		scoreTarget = 0;
+		break;
+	case2:
+		redTarget = 20;
+		iceObjective = 5;
+		powerTarget = 4;
+		break;
+	case 3:
+		scoreTarget = 2200;
+		redTarget = 0;
+		iceObjective = 0;
+		powerTarget = 0;
+		break;
+	}
+}
+bool Game::checkCompleted() {
+	//verificar si se cumplieron los objetivos
+	bool completed = false;
+	if (currentLevel == 1) {
+		return true;
+	}if (currentLevel == 2) {
+		if(redColected<redTarget && iceCubeColected< iceObjective && powerColected<powerTarget) {
+			return false;
+		}
+	}if (currentLevel == 3) {
+		if (score < scoreTarget) {
+			return false;
+		}
+	}return true;
+}
+/*sf::Text Game::objectivesText() {
+
+}*/
 int Game:: getFinalScore() {
 	return score;
 }

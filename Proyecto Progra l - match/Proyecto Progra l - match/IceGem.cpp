@@ -9,10 +9,10 @@ void IceGem::match(int i, int j, int** matrix, sf::Sprite** matrixx,Gems***matri
 			matrixx[i][j] = sprite;
 	}else{
 		matrix[i][j] = -1;
-		if (matrixG[i][j] != nullptr) {
-			delete matrixG[i][j];
-			matrixG[i][j] = nullptr;
+		if (matrixG[i][j] != nullptr && !matrixG[i][j]->fading) {
+			matrixG[i][j]->fadeOut();
+			matrix[i][j] = -2;
 		}
-		matrixx[i][j].setColor(sf::Color::Transparent);
+	
 	}
 }

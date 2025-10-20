@@ -90,7 +90,7 @@ bool endWindow() {
     return false;
 }
 int main() {
-
+    
     bool restart = true;
     while (restart) {
         startWindow();
@@ -119,6 +119,7 @@ int main() {
                     p->gravity();
                 }
             }
+			p->animation(0.5f, 2.f);
             window.clear();
             p->show(window);
             window.draw(g->yourScore());

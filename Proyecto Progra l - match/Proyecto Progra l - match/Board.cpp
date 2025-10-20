@@ -29,7 +29,7 @@ void Board::fullMatrix() {
 }
 
 void Board::createPowerGem(int i, int j) {
-	if (matrixG[i][j]) delete matrixG[i][j];
+	if (matrixG[i][j])  matrixG[i][j];
 	matrixG[i][j] = new PowerGem();
 	matrix[i][j] = 6;
 
@@ -48,7 +48,7 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 		int counter = 1;
 		for (int  i= 1; i  < 8; i++)
 		{
-			if (matrix[i][j] == matrix[i - 1][j] && matrix[i][j] != -1 && matrix[i][j] != 5 ) {//si el anterior es igual al actual y el valor no es -1 se suma contador
+			if (matrix[i][j] == matrix[i - 1][j] && matrix[i][j] != -1 && matrix[i][j] != 5 && matrix[i][j] != -2) {//si el anterior es igual al actual y el valor no es -1 se suma contador
 				counter++;
 			}
 			else {//si la posicion actual es diferente a la anterior pero el contador es mayor o igual a 3 entonces se eliminan los 3 o mas anteriores
@@ -66,9 +66,7 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 						else if (matrixG[p][j] != nullptr) {
 							matrixG[p][j]->match(p, j, matrix, matrixx, matrixG);
 						}
-						else {
-							matrix[p][j] = -1;
-						}
+						else {	matrix[p][j] = -1;}
 					}
 					int right = segStart - 1;
 					int left = segEnd + 1;
@@ -97,9 +95,7 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 				else if (matrixG[p][j] != nullptr) {
 					matrixG[p][j]->match(p, j, matrix, matrixx, matrixG);
 				}
-				else {
-					matrix[p][j] = -1;
-				}
+				//else {matrix[p][j] = -1;}
 			}
 			int right = segStart - 1;
 			int left = segEnd + 1;
@@ -120,7 +116,7 @@ bool Board::deleteHorizontal(sf::Vector2i movedPos) {
 	for (int i = 0; i < 8; i++) {
 		int counter = 1;
 		for (int j = 1; j < 8; j++) {
-			if (matrix[i][j] == matrix[i][j - 1] && matrix[i][j] != -1 && matrix[i][j] != 5) {
+			if (matrix[i][j] == matrix[i][j - 1] && matrix[i][j] != -1 && matrix[i][j] != 5 && matrix[i][j]!=-2) {
 				counter++;
 			}
 			else {
@@ -138,7 +134,7 @@ bool Board::deleteHorizontal(sf::Vector2i movedPos) {
 						else if (matrixG[i][p] != nullptr) {
 							matrixG[i][p]->match(i, p, matrix, matrixx, matrixG);
 						}
-						else { matrix[i][p] = -1;}
+					//	else { matrix[i][p] = -1;}
 					}
 					int right = segStart-1;
 					int left = segEnd+1;
@@ -189,7 +185,7 @@ void Board :: show(sf::RenderWindow& window){
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			if (matrix[i][j] != -1&& matrixG[i][j]!=nullptr) {
+			if (matrixG[i][j]!=nullptr) {
 			window.draw(matrixG[i][j]->getSprite());
 			}
 		}
@@ -200,25 +196,54 @@ void Board::updateSprites() {//actualiza las posiciones de los sprites en la mat
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			int val = matrix[i][j];
-			if (val == 6 && matrixG[i][j] == nullptr) {
-				matrixG[i][j] = new PowerGem();
-			}
-			if (matrixG[i][j] != nullptr) {
+			if (matrixG[i][j] != nullptr && !matrixG[i][j]->fading) {
 				sf::Sprite& s = matrixG[i][j]->getSprite();
-				if (val >= 0) {
-					s.setColor(sf::Color::White);
+
+				if (s.getTexture() == nullptr) {
+					// sprite sin textura, marcar transparente
+					matrixx[i][j].setColor(sf::Color::Transparent);
+					continue;
 				}
-				else {
-					s.setColor(sf::Color::Transparent);
-				}s.setPosition(j * 64.f, i * 64.f);
-				s.setScale(0.1f, 0.1f);
+
+				s.setColor(sf::Color::White);
+				matrixG[i][j]->targetPos = sf::Vector2f(j * 64.f, i * 64.f);
 				matrixx[i][j] = s;
 			}
 			else {
 				matrixx[i][j].setColor(sf::Color::Transparent);
 			}
+		}
+	}
+}
 
+void Board:: animation(float speed,float fadeSpeed) {
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			if (matrixG[i][j]==nullptr) {
+				continue;// el continuo sirve para saltar a la siguiente iteracion del bucle si la condicion se cumple, en este caso si la posicion es nula o no hay nada.
+				// ejemplo si la posicion es nula no se hace nada y se salta a la siguiente posicion.
+			}
+			sf::Sprite& sp = matrixG[i][j]->getSprite();
+			matrixG[i][j]->updateFade(fadeSpeed);
+			if (matrixG[i][j]->fadeFinished()) {
+				delete matrixG[i][j];
+				matrixG[i][j] = nullptr;
+				matrix[i][j] = -1;
+				continue;
+			}
+			sf::Vector2f currentPos = sp.getPosition();
+			sf::Vector2f target = matrixG[i][j]->targetPos;
+			sf::Vector2f direction = target - currentPos;
+			float distance = std::sqrt(direction.x*direction.x+ direction.y* direction.y);//pitagoras para sacar la distancia real entre los 2 puntos, el original y el destino
+			if (distance > 0.5f) {
+				direction /= distance;          // normaliza el vector
+				sp.move(direction * speed);     // mueve suavemente
+			}
+			else { // cuando la distancia es menor a 2, se mueve al destino.
+				sp.setPosition(target);
+			}
 		}
 	}
 }
@@ -227,10 +252,9 @@ void Board::cleanDeletedSprites() {
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			if (matrix[i][j] == -1 && matrixG[i][j] != nullptr) {
+			if (matrix[i][j] == -1 && matrixG[i][j] != nullptr && !matrixG[i][j]->fading) {
 				delete matrixG[i][j];
 				matrixG[i][j] = nullptr;
-				matrixx[i][j].setColor(sf::Color::Transparent);
 			}
 		}
 	}
@@ -242,26 +266,32 @@ void Board::gravity(){
 			int empty = 7;// empieza en la ultima fila
 			for (int i = 7; i >= 0; i--)
 			{
-				if (matrix[i][j] != -1)//si la posicion no hay -1 y si empty es diferente de i, se mueve el valor a la posicion empty
+				if (matrix[i][j] != -1 && matrix[i][j] != -2)//si la posicion no hay -1 y si empty es diferente de i, se mueve el valor a la posicion empty
 										//e i se vuelve -1, luego empty decrementa
 				{
 					if (empty != i) {
 						matrix[empty][j] = matrix[i][j];
 						matrix[i][j] = -1;
 						swap(matrixG[empty][j], matrixG[i][j]);
+						if (matrixG[empty][j])
+							matrixG[empty][j]->targetPos = sf::Vector2f(j * 64.f, empty * 64.f);
+						
 					}empty--;
 				}
 			}
-			for (int e = empty; e >= 0; e--) {// una vez terminado los espacios vacios se llenan con numeros aleatorios 
-				
-				int type2	= rand() % 5;
+			for (int e = empty; e >= 0; e--) {
+				int type2 = rand() % 5;
 				matrix[e][j] = type2;
-				if (matrixG[e][j] != nullptr) {
-				delete matrixG[e][j];
-				matrixG[e][j] = nullptr;
-				}matrixG[e][j] = new NormalG(type2);
-			}
-			updateSprites();
+				
+					if (matrixG[e][j] != nullptr) {
+						delete matrixG[e][j];
+						matrixG[e][j] = nullptr;	
+					}
+					matrixG[e][j] = new NormalG(type2);
+					matrixG[e][j]->getSprite().setPosition(j * 64.f, -64.f * (empty - e + 1));
+					matrixG[e][j]->targetPos = sf::Vector2f(j * 64.f, e * 64.f);
+				
+			}updateSprites();
 		}
 }
 void Board:: resetPoints() {

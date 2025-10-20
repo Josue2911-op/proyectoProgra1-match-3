@@ -5,15 +5,17 @@
 #include "IceGem.h"
 #include "PowerGem.h"
 #include "normalGem.h"
+//#include <cmath>
 using namespace std;
 class Board {
 private:
 	int** matrix;
-	sf::Sprite **matrixx;
+	sf::Sprite** matrixx;
 	int points;
 	Gems*** matrixG;
 public:
-	Board() {
+	Board(){
+		
 		points = 0;
 		matrixG = new Gems **[8];
 		for (int i = 0; i < 8; i++)
@@ -77,6 +79,7 @@ public:
 	}
 	void cleanDeletedSprites();
 	void createPowerGem(int i, int j);
+	void animation(float speed,float fadeSpeed);
 	void gravity();
 	void show(sf::RenderWindow& window);
 	void updateSprites();

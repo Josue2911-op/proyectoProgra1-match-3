@@ -17,8 +17,11 @@ private:
 	int temp1;
 	sf::Sprite temp2;
 	int in1, in2;
+	int redTarget, iceObjective, powerTarget, scoreTarget,gemsColected, redColected, iceCubeColected,powerColected;
+	int currentLevel;
 public:
 	Game(Board* board){
+		currentLevel = 0;
 		in1 = 0;
 		in2 = 0;
 		temp1 = 0;
@@ -32,11 +35,15 @@ public:
 	sf::Vector2i posMouse(sf::RenderWindow& window);
 	bool replacePlace(sf::Vector2i pos);
 	sf::Text yourMoves(bool moved);
+	void createDataLevel(int level);
+	bool checkCompleted();
 	sf::Text yourScore();
+	sf::Text objectivesText();
 	sf::Vector2i getMove()const {
 		return secondClick;
 	}
 	int getFinalScore();
 	int getMoves();
+
 	void reset();
 };
