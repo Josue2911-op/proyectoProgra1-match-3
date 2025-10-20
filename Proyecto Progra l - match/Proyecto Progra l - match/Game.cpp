@@ -122,23 +122,23 @@ sf::Text Game::yourScore(){
 void Game::createDataLevel(int level) {
 	 currentLevel = level;
 	reset();
-	redColected = 0;
-	iceCubeColected = 0;
-	powerColected = 0;
+	redCollected = 0;
+	iceCubeCollected = 0;
+	powerCollected = 0;
 	switch (level) {
-	case 1:
+		case 1:
 		redTarget = 0;
 		iceObjective = 0;
 		powerTarget = 0;
 		scoreTarget = 0;
 		break;
-	case2:
-		redTarget = 20;
+		case 2:
+		redTarget = 15;
 		iceObjective = 5;
-		powerTarget = 4;
+		powerTarget = 3;
 		break;
-	case 3:
-		scoreTarget = 2200;
+		case 3:
+		scoreTarget = 1000;
 		redTarget = 0;
 		iceObjective = 0;
 		powerTarget = 0;
@@ -147,29 +147,55 @@ void Game::createDataLevel(int level) {
 }
 bool Game::checkCompleted() {
 	//verificar si se cumplieron los objetivos
-	bool completed = false;
 	if (currentLevel == 1) {
 		return true;
-	}if (currentLevel == 2) {
-		if(redColected<redTarget && iceCubeColected< iceObjective && powerColected<powerTarget) {
-			return false;
+	}else if (currentLevel == 2) {
+		if(redCollected>=redTarget && iceCubeCollected >=iceObjective && powerCollected>=powerTarget) {
+			return true;
+			
 		}
-	}if (currentLevel == 3) {
-		if (score < scoreTarget) {
-			return false;
-		}
-	}return true;
+		return false;
+	}else if (currentLevel == 3) {
+		return score >= scoreTarget;
+	}
+ return true; 
 }
-/*sf::Text Game::objectivesText() {
+sf::Text Game::objectivesText() {
+	objectives.setFont(font);
+	objectives.setCharacterSize(18);
+	objectives.setFillColor(sf::Color::White);
+	objectives.setPosition(520, 110);
 
-}*/
+	 redCollected += m->getReds();
+	 iceCubeCollected += m->getDeleteIce();
+	 powerCollected += m->getDeletePower();
+	if (currentLevel == 1) {
+		stri="Maximize Your Score!!";
+	}
+	else if (currentLevel == 2) {
+		stri= "Destroy Red Gems: " + to_string(redCollected) + " / "+ to_string(redTarget) + "\n" + "Ice Cubes: " + to_string(iceCubeCollected) + "/"
+			+ to_string(iceObjective) + "\n" +	"Power Gems: " + to_string(powerCollected) + "/" + to_string(powerTarget);
+	}
+	else if (currentLevel == 3) {
+		stri="Get 1000 points before moves 9 moves : " + to_string(score) + " / " + to_string(scoreTarget) + "\n" +
+			"Moves left: " + to_string(moves-10);
+	}
+	objectives.setString(stri);
+	return objectives;
+}
 int Game:: getFinalScore() {
 	return score;
 }
 int Game::getMoves() {
 	return moves;
 }
+int Game::getCurrentLevel() {
+	return currentLevel;
+}
 void Game:: reset() {
 	score = 0;
+	powerCollected = 0;
+	redCollected = 0;	
+	iceCubeCollected = 0;
 	moves = 20;
 }

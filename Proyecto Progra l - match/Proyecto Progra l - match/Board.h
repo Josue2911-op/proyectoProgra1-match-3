@@ -13,9 +13,14 @@ private:
 	sf::Sprite** matrixx;
 	int points;
 	Gems*** matrixG;
-public:
-	Board(){
+	int reds;
 		
+public:
+	int static deleteIce, deletePower;
+	Board(){
+		reds = 0;
+		deleteIce = 0;
+		deletePower = 0;
 		points = 0;
 		matrixG = new Gems **[8];
 		for (int i = 0; i < 8; i++)
@@ -76,6 +81,21 @@ public:
 	}
 	Gems*** getMatrixGForReplace() {
 		return matrixG;
+	}
+	int getReds() {
+		int temp = reds;
+		reds = 0;
+		return temp;
+	}
+	int getDeleteIce() {
+		int temp = deleteIce;
+		deleteIce = 0;
+		return temp;
+	}
+	int getDeletePower() {
+		int temp = deletePower;
+		deletePower = 0;
+		return temp;
 	}
 	void cleanDeletedSprites();
 	void createPowerGem(int i, int j);

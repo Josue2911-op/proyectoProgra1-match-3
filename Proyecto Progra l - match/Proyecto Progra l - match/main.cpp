@@ -39,9 +39,34 @@ bool endWindow() {
     sf::Text textScore;
     sf::Text textRestart;
     sf::Text textEnd;
+    sf::Text congrats;
+    sf::Text fail;
+    sf::Text next;
     sf::Font fontEnd;
+
     fontEnd.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
-	//boton restart
+    if (g->checkCompleted() && g->getCurrentLevel()<=3) {
+        congrats.setFont(fontEnd);
+        congrats.setString("Level Completed!!");
+        congrats.setCharacterSize(30);
+        congrats.setFillColor(sf::Color::White);
+        congrats.setPosition(250, 100);
+        if (g->getCurrentLevel() < 3) {
+            next.setFont(fontEnd);
+            next.setString("Next Level");
+            next.setCharacterSize(20);
+            next.setFillColor(sf::Color::White);
+            next.setPosition(350, 150);
+        }
+    }
+    else if (!g->checkCompleted()) {
+        fail.setFont(fontEnd);
+        fail.setString("Game Over!!");
+        fail.setCharacterSize(30);
+        fail.setFillColor(sf::Color::White);
+        fail.setPosition(300, 100);
+    }
+    //boton restart
     textRestart.setFont(fontEnd);
     textRestart.setString("Restart");
     textRestart.setCharacterSize(20);
@@ -72,6 +97,15 @@ bool endWindow() {
                     windowEnd.close(); //la ventana se cierra y el main termina retornando false, por ende termina el programa garacias while(restart)
                     return false;
                 }
+                if (g->checkCompleted() && g->getCurrentLevel() < 3 && next.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
+					int level = g->getCurrentLevel()+1;
+					g->createDataLevel(level);
+                    p->fullMatrix();                                              // se reinicia la matriz, los puntos y movimientos
+                    p->resetPoints();
+                    g->reset();
+                    windowEnd.close();
+                    return true;
+                }
                 if (textRestart.getGlobalBounds().contains(mouse3.x, mouse3.y)) {// si preciona en restart en la hitbox con click izquierdo
                     p->fullMatrix();                                              // se reinicia la matriz, los puntos y movimientos
                     p->resetPoints();
@@ -82,6 +116,9 @@ bool endWindow() {
             }
         }
         windowEnd.clear();
+		windowEnd.draw(congrats);
+		windowEnd.draw(next);
+        windowEnd.draw(fail);
         windowEnd.draw(textRestart);
         windowEnd.draw(textScore);
         windowEnd.draw(textEnd);
@@ -90,13 +127,12 @@ bool endWindow() {
     return false;
 }
 int main() {
-    
+    g->createDataLevel(1);
     bool restart = true;
     while (restart) {
         startWindow();
         sf::Event event;
         sf::RenderWindow window(sf::VideoMode(800, 600), "Match-3");
-        g->reset();
         p->fullMatrix();
         while (window.isOpen()) {
             bool moved = false;
@@ -119,15 +155,21 @@ int main() {
                     p->gravity();
                 }
             }
-			p->animation(0.5f, 2.f);
+            p->animation(0.5f, 2.f);
             window.clear();
             p->show(window);
-            window.draw(g->yourScore());
+           window.draw(g->yourScore());
+           window.draw(g->objectivesText());
             window.draw(g->yourMoves(moved));
             window.display();
-            if (g->getMoves() == 0) {
+
+            if (g->getCurrentLevel() == 1 && g->getMoves() == 0) {
                 window.close();
             }
+            else if (g->getCurrentLevel() == 2 && g->checkCompleted() || g->getMoves() == 0 
+                || g->getCurrentLevel() == 3 && g->checkCompleted() || g->getMoves() == 0){
+                window.close();
+			}
         }
         restart = endWindow();
     }

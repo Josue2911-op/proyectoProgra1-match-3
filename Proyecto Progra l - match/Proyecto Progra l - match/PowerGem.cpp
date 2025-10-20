@@ -1,13 +1,21 @@
 #include "PowerGem.h"
-void PowerGem::match(int i, int j, int** matrix, sf::Sprite** matrixx,Gems***matrixG) {
+#include "Board.h"
+void PowerGem::match(int i, int j, int** matrix, sf::Sprite** matrixx,Gems***matrixG ) {
+	Board::deletePower++;
 	for (int u = 0; u < 8; u++) {
 		if (u != j&& matrixG[i][u]!=nullptr && !matrixG[i][u]->fading) {
-			matrixG[i][u]->fadeOut();
-			matrix[i][u] = -2;
+			int type = matrixG[i][u]->getType();
+			 if (type == 5) Board::deleteIce++;
+			else if (type == 6) Board::deletePower++;
+			matrixG[i][u]->fadeOut();//activa el fade
+			matrix[i][u] = -2;//marca posicion vacia para gravity
 		}
 	}
 	for (int k = 0; k < 8; k++) {
 		if (k != i && matrixG[k][j]!=nullptr && !matrixG[k][j]->fading) {
+			int type = matrixG[k][j]->getType();
+			if (type == 5) Board::deleteIce++;
+			else if (type == 6) Board::deletePower++;
 			matrixG[k][j]->fadeOut();
 			matrix[k][j] = -2;
 		}

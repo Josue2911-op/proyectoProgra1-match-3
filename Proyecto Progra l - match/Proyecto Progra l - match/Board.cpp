@@ -4,7 +4,8 @@
 #include "PowerGem.h"
 #include "normalGem.h"
 using namespace std;
-
+int Board::deleteIce = 0;
+int Board::deletePower = 0;
 void Board::fullMatrix() {
 
 	for (int i = 0; i < 8; i++)
@@ -61,12 +62,25 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 							createPowerGem(p, j);
 						}
 						else if (matrix[p][j] == 5 && matrixG[p][j] != nullptr) {
+							int gemType = matrixG[p][j]->getType();
+							if (gemType == 5) {
+								deleteIce++;
+							}
 							matrixG[p][j]->match(p, j, matrix, matrixx, matrixG);
 						}
 						else if (matrixG[p][j] != nullptr) {
+							int type = matrixG[p][j]->getType();
+							if (type == 6) {
+								deletePower++;
+							}
 							matrixG[p][j]->match(p, j, matrix, matrixx, matrixG);
+							if (type == 4) {
+
+								reds++;
+							}
+						
 						}
-						else {	matrix[p][j] = -1;}
+					
 					}
 					int right = segStart - 1;
 					int left = segEnd + 1;
@@ -74,6 +88,7 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 						matrixG[right][j]->match(right, j, matrix, matrixx, matrixG);
 					}if (left >= 0 && left < 8 && matrix[left][j] == 5 && matrixG[left][j] != nullptr) {
 						matrixG[left][j]->match(left, j, matrix, matrixx, matrixG);
+
 					}
 					deleted = true;
 					points += 10 * counter;
@@ -93,7 +108,17 @@ bool Board::deleteVertical(sf::Vector2i pos) {
 					matrixG[p][j]->match(p, j, matrix, matrixx, matrixG);
 				}
 				else if (matrixG[p][j] != nullptr) {
+					int gemType = matrixG[p][j]->getType(); 
 					matrixG[p][j]->match(p, j, matrix, matrixx, matrixG);
+					if (gemType == 4) {
+						reds++;
+					}
+					else if (gemType == 6) {
+						deletePower++;
+					}
+					else if (gemType == 5) {
+						deleteIce++;
+					}
 				}
 				//else {matrix[p][j] = -1;}
 			}
@@ -120,6 +145,7 @@ bool Board::deleteHorizontal(sf::Vector2i movedPos) {
 				counter++;
 			}
 			else {
+	
 				if (counter >= 3) {
 					int segStart = j - counter;
 					int segEnd = j - 1;
@@ -130,9 +156,21 @@ bool Board::deleteHorizontal(sf::Vector2i movedPos) {
 						}
 						else if (matrix[i][p] == 5 && matrixG[i][p] != nullptr) {
 							matrixG[i][p]->match(i, p, matrix, matrixx, matrixG);
+							
 						}
 						else if (matrixG[i][p] != nullptr) {
+							int type = matrixG[i][p]->getType(); 
 							matrixG[i][p]->match(i, p, matrix, matrixx, matrixG);
+							
+							if (type == 4) {
+								reds++;
+							}
+							else if (type == 6) {
+								deletePower++;
+							}
+							else if (type == 5) {
+								deleteIce++;
+							}
 						}
 					//	else { matrix[i][p] = -1;}
 					}
@@ -155,27 +193,39 @@ bool Board::deleteHorizontal(sf::Vector2i movedPos) {
 			int segEnd = 7;
 			int powerPos = segStart + counter / 2;
 			for (int p = segStart; p <= segEnd; p++) {
-				if (counter >= 4 && p==powerPos) {
+				if (counter >= 4 && p == powerPos) {
 					createPowerGem(i, p);
 				}
 				else if (matrix[i][p] == 5 && matrixG[i][p] != nullptr) {
+					int gemType = matrixG[i][p]->getType();
+					if (gemType == 5) {
+					deleteIce++;
+					}
 					matrixG[i][p]->match(i, p, matrix, matrixx, matrixG);
 				}
 				else if (matrixG[i][p] != nullptr) {
+					int gemType = matrixG[i][p]->getType(); 
+				   if (gemType == 6) {
+					deletePower++;
+				   }
 					matrixG[i][p]->match(i, p, matrix, matrixx, matrixG);
+					if (gemType == 4) {
+						reds++;
+					}			
+					else { 
+						matrix[i][p] = -1; 
+					}
 				}
-				else { matrix[i][p] = -1; }
-				
+				int right = segStart - 1;
+				int left = segEnd + 1;
+				if (right >= 0 && right < 8 && matrix[i][right] == 5 && matrixG[i][right] != nullptr) {
+					matrixG[i][right]->match(i, right, matrix, matrixx, matrixG);
+				}if (left >= 0 && left < 8 && matrix[i][left] == 5 && matrixG[i][left] != nullptr) {
+					matrixG[i][left]->match(i, left, matrix, matrixx, matrixG);
+				}
+				deleted = true;
+				points += 10 * counter;
 			}
-			int right = segStart - 1;
-			int left = segEnd + 1;
-			if (right>=0 && right < 8 && matrix[i][right] == 5 && matrixG[i][right] != nullptr) {
-				matrixG[i][right]->match(i, right, matrix, matrixx, matrixG);
-			}if (left >= 0 && left < 8 && matrix[i][left] == 5 && matrixG[i][left] != nullptr) {
-				matrixG[i][left]->match(i, left, matrix, matrixx, matrixG);
-			}
-			deleted = true;
-			points += 10 * counter;
 		}
 	}
 	return deleted;

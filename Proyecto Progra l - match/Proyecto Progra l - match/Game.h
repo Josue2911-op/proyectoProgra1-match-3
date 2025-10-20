@@ -9,6 +9,7 @@ private:
 	int score;
 	sf::Text textScore;
 	sf::Text textMoves;
+	sf::Text objectives;
 	sf::Font font;
 	sf::Font font2;
 	int countClicks = 0;
@@ -17,11 +18,20 @@ private:
 	int temp1;
 	sf::Sprite temp2;
 	int in1, in2;
-	int redTarget, iceObjective, powerTarget, scoreTarget,gemsColected, redColected, iceCubeColected,powerColected;
+	int redTarget, iceObjective, powerTarget, scoreTarget, redCollected, iceCubeCollected,powerCollected;
 	int currentLevel;
+	string stri;
 public:
 	Game(Board* board){
+		stri = "";
+		redTarget = 0;
+		iceCubeCollected = 0;
+		scoreTarget = 0;
+		redCollected = 0;
+		iceObjective = 0;
 		currentLevel = 0;
+		powerCollected = 0;
+		powerTarget = 0;
 		in1 = 0;
 		in2 = 0;
 		temp1 = 0;
@@ -44,6 +54,6 @@ public:
 	}
 	int getFinalScore();
 	int getMoves();
-
+	int getCurrentLevel();
 	void reset();
 };

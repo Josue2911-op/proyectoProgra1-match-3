@@ -1,4 +1,5 @@
 #include "IceGem.h"
+#include "Board.h"
 void IceGem::match(int i, int j, int** matrix, sf::Sprite** matrixx,Gems***matrixG) {
 	if (hits > 0) {
 		hits--;
@@ -12,6 +13,7 @@ void IceGem::match(int i, int j, int** matrix, sf::Sprite** matrixx,Gems***matri
 		if (matrixG[i][j] != nullptr && !matrixG[i][j]->fading) {
 			matrixG[i][j]->fadeOut();
 			matrix[i][j] = -2;
+			Board::deleteIce++;
 		}
 	
 	}
