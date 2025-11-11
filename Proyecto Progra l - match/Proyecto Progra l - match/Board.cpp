@@ -21,9 +21,7 @@ void Board::fullMatrix() {
 			else {
 				matrixG[i][j] = new NormalG(type);
 			}
-			matrixx[i][j] = matrixG[i][j]->getSprite();
-			matrixx[i][j].setPosition(j * 64.f, i * 64.f);
-			matrixx[i][j].setScale(0.1f, 0.1f);
+			
 			
 		}
 	}
@@ -347,3 +345,9 @@ void Board::gravity(){
 void Board:: resetPoints() {
 	points = 0;
 }
+
+void Board::leaderBoard() {
+
+
+}
+

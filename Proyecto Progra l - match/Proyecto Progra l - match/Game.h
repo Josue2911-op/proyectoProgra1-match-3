@@ -40,14 +40,14 @@ public:
 		moves = 20;
 		score = 0;
 		try {
-			font.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+			font.loadFromFile("assets/BitcountGridDouble_Cursive-Regular.ttf");
 		}
 		catch (const exception& e) {
 			cerr << "Error al cargar la fuente: " << e.what() << endl;
 		}
 
 		try {
-			font2.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+			font2.loadFromFile("assets/BitcountGridDouble_Cursive-Regular.ttf");
 		}
 		catch (const exception& e) {
 			cerr << "Error al cargar la fuente:" << e.what() << endl;

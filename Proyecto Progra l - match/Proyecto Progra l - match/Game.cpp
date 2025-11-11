@@ -138,7 +138,7 @@ void Game::createDataLevel(int level) {
 		powerTarget = 3;
 		break;
 		case 3:
-		scoreTarget = 1000;
+		scoreTarget = 600;
 		redTarget = 0;
 		iceObjective = 0;
 		powerTarget = 0;
@@ -177,7 +177,7 @@ sf::Text Game::objectivesText() {
 			+ to_string(iceObjective) + "\n" +	"Power Gems: " + to_string(powerCollected) + "/" + to_string(powerTarget);
 	}
 	else if (currentLevel == 3) {
-		stri="Get 1000 points before moves 9 moves : " + to_string(score) + " / " + to_string(scoreTarget) + "\n" +
+		stri="Get 600 points before moves 9 moves : " + to_string(score) + " / " + to_string(scoreTarget) + "\n" +
 			"Moves left: " + to_string(moves-10);
 	}
 	objectives.setString(stri);

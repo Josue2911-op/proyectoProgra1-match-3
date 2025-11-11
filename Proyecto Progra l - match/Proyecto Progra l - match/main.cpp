@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Board.h"
 #include "Game.h"
+#include "Ranking.h"
 //what() es un método de la clase std::exception (y sus derivadas) que devuelve un mensaje descriptivo del error.
 Board* p = new Board();
 Game* g = new Game(p);
@@ -11,7 +12,7 @@ void startWindow() {
     sf::Text textStart;
 	sf::Font fontStart;
     try {
-        fontStart.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+        fontStart.loadFromFile("assets/BitcountGridDouble_Cursive-Regular.ttf");
     }catch(const exception& e) {
         cerr << "Error al cargar la fuente: " << e.what() << endl;
         exit(1);
@@ -56,7 +57,7 @@ bool endWindow() {
     sf::Text next;
     sf::Font fontEnd;
     try{
-        fontEnd.loadFromFile("BitcountGridDouble_Cursive-Regular.ttf");
+        fontEnd.loadFromFile("assets/BitcountGridDouble_Cursive-Regular.ttf");
     }
     catch (const exception& e) {
         cerr << "Error al cargar la fuente: " << e.what() << endl;
@@ -195,6 +196,8 @@ int main() {
                 window.close();
 			}
         }
+        Ranking rk(g);
+        rk.show();
         restart = endWindow();
     }
 

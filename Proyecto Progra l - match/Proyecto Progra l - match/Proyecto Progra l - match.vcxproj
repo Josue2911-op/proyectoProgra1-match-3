@@ -162,6 +162,7 @@ sfml-audio.lib</AdditionalDependencies>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="normalGem.cpp" />
     <ClCompile Include="PowerGem.cpp" />
+    <ClCompile Include="Ranking.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
@@ -170,6 +171,7 @@ sfml-audio.lib</AdditionalDependencies>
     <ClInclude Include="IceGem.h" />
     <ClInclude Include="normalGem.h" />
     <ClInclude Include="PowerGem.h" />
+    <ClInclude Include="Ranking.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

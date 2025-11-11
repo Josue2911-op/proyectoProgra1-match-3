@@ -4,6 +4,7 @@
 #include "Gems.h"
 #include "IceGem.h"
 #include "PowerGem.h"
+#include <fstream>
 #include "normalGem.h"
 //#include <cmath>
 using namespace std;
@@ -109,6 +110,7 @@ public:
 	void show(sf::RenderWindow& window);
 	void updateSprites();
 	void resetPoints();
+	void leaderBoard();
 
 	~Board() {
 		for (int i = 0; i < 8; i++) {

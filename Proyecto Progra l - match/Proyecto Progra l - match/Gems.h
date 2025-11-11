@@ -23,7 +23,7 @@ public:
 	Gems():fading(false), fade(255.f),targetPos(0.f, 0.f) {
 	}
 	sf::Texture& getTexture(int index) {//devuelve la textura que se usa en Board para FullMatrix y updateSprites
-		return textures[index];//el index es el tipo de fruta que esta asignado por el numero random de entre las 5 
+		return textures[index];//el index es el tipo de gema que esta asignado por el numero random de entre las 5 
 	}
 	virtual int getType() = 0;
 	virtual sf::Sprite& getSprite() = 0;
