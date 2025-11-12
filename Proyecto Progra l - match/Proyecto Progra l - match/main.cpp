@@ -56,6 +56,7 @@ bool endWindow() {
     sf::Text fail;
     sf::Text next;
     sf::Font fontEnd;
+    sf::Text textSelectLevel;
     try{
         fontEnd.loadFromFile("assets/BitcountGridDouble_Cursive-Regular.ttf");
     }
@@ -103,6 +104,12 @@ bool endWindow() {
     textEnd.setFillColor(sf::Color::White);
     textEnd.setPosition(350, 250);
 
+    textSelectLevel.setFont(fontEnd);
+    textSelectLevel.setString("Select Level");
+    textSelectLevel.setCharacterSize(20);
+    textSelectLevel.setFillColor(sf::Color::White);
+    textSelectLevel.setPosition(350, 350);
+
     while (windowEnd.isOpen()) {
         sf::Event event3;
         while (windowEnd.pollEvent(event3)) {
@@ -131,6 +138,27 @@ bool endWindow() {
                         windowEnd.close();
                         return true;
                     }
+
+                    if (textSelectLevel.getGlobalBounds().contains(mouse3.x, mouse3.y)) {
+                        windowEnd.close();
+
+                        // Abrir la ventana del menú de niveles
+                        sf::RenderWindow levelWindow(sf::VideoMode(800, 600), "Select Level");
+                        vector<LevelData> levels = g->loadLevels("assets/levels.txt");
+
+                        int lastCompleted = g->getCurrentLevel() - 1;
+
+                        int selectedLevel = g->levelMenu(levelWindow, levels, lastCompleted);
+
+                        if (selectedLevel != -1) {
+                            g->createDataLevel(selectedLevel + 1);
+                            p->fullMatrix();
+                            p->resetPoints();
+                            g->reset();
+                        }
+
+                        return true; // volvemos al juego
+                    }
                 }
               
             }
@@ -147,12 +175,25 @@ bool endWindow() {
         windowEnd.draw(textRestart);
         windowEnd.draw(textScore);
         windowEnd.draw(textEnd);
+        windowEnd.draw(textSelectLevel);
         windowEnd.display();
     }
     return false;
 }
 int main() {
-    g->createDataLevel(1);
+    // cargar los niveles desde un archivo JSON o .txt
+    vector<LevelData> niveles = g->loadLevels("assets/levels.txt");
+
+    // (este método ya crea su propia ventana y devuelve el nivel seleccionado)
+    sf::RenderWindow menuWindow(sf::VideoMode(800, 600), "Seleccionar Nivel");
+    int nivelSeleccionado = g->levelMenu(menuWindow, niveles, 0); // 0 = solo nivel 1 desbloqueado
+
+ //si el usuario cierra el menu sin elegir
+    if (nivelSeleccionado == -1)
+        return 0;
+
+    // Paso 4: inicializar el nivel elegido
+    g->createDataLevel(nivelSeleccionado + 1);
     bool restart = true;
     while (restart) {
         startWindow();

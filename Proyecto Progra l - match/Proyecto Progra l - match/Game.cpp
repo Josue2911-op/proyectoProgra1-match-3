@@ -199,3 +199,86 @@ void Game:: reset() {
 	iceCubeCollected = 0;
 	moves = 20;
 }
+
+vector < LevelData> Game:: loadLevels(const string& file) {
+	vector<LevelData> levels;
+	ifstream fileLvl(file);
+	if (!fileLvl.is_open()) {
+		cerr << "no se pudo abrir " << file << endl;
+		return levels;
+	}string line;
+	LevelData lvl;
+  while (getline(fileLvl, line)) {
+	if (line.find("\"level\"") != string::npos) {
+		lvl.level = stoi(line.substr(line.find(":") + 1));// stoi convierte strings en ints
+	}
+	else if (line.find("\"redTarget\"")!=string::npos) {
+		lvl.redTarget = stoi(line.substr(line.find(":") + 1));// el + 1, es para pasar a lo que está despues del : y probablmente el espaciado 
+	}
+	else if (line.find("\"powerTarget\"") != string::npos) {
+		lvl.powerTarget = stoi(line.substr(line.find(":") + 1));// recorre todo la linea hasta encontrar ":"
+	}
+	else if (line.find("\"iceObjective\"") != string::npos) {
+		lvl.iceObjective = stoi(line.substr(line.find(":") + 1));
+	}
+	else if (line.find("\"scoreTarget\"") != string::npos) { 
+		lvl.scoreTarget = stoi(line.substr(line.find(":") + 1));
+	}
+	else if (line.find("}") != string::npos && lvl.redTarget != 0 || lvl.powerTarget != 0 || lvl.iceObjective != 0 || lvl.scoreTarget != 0) {
+		levels.push_back(lvl); //
+		lvl = LevelData();
+	}
+
+  }
+	fileLvl.close();
+	return levels;
+}
+
+int Game::levelMenu(sf::RenderWindow& levelMenu, const vector<LevelData>& levels, int lastCompleted) {
+	vector<sf::Text> levelText(levels.size());//crea un arreglo de text
+	for (size_t i = 0; i < levels.size(); i++)
+	{//size_t se usa comúnmente para recorrer contenedores como std::vector, std::string y entre otros
+		levelText[i].setFont(font);
+		levelText[i].setCharacterSize(30);
+		levelText[i].setPosition(250, 110 + i * 40);
+		if ((int)i <= lastCompleted) {
+			levelText[i].setString("Level: " + to_string(i + 1));
+		}
+		else {
+			levelText[i].setString("Level: " + to_string(i + 1) + "(Locked)");
+		}
+
+		if ((int)i <= lastCompleted) {// el (int) convierte i de tipo size_t a int
+			levelText[i].setFillColor(sf::Color::White);
+		}
+		else{
+			levelText[i].setFillColor(sf::Color(128, 128, 128)); // gris
+		}
+	}
+
+	while (levelMenu.isOpen()) {
+		sf::Event event;
+		while (levelMenu.pollEvent(event)) {
+			if (event.type == sf::Event::Closed)
+				levelMenu.close();
+
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+				sf::Vector2i pos = sf::Mouse::getPosition(levelMenu);
+
+				for (size_t i = 0; i < levels.size(); i++) {
+					if ((int)i <= lastCompleted && levelText[i].getGlobalBounds().contains(pos.x, pos.y)) {
+						
+						levelMenu.close(); // cierra la ventana del menú
+						return (int)i; // devuelve el número de nivel seleccionado
+					}
+				}
+			}
+		}
+		levelMenu.clear(sf::Color::Black);
+		for (size_t i = 0; i < levels.size(); i++) {
+			levelMenu.draw(levelText[i]);
+		}
+		levelMenu.display();
+
+	}return -1;
+}

@@ -1,0 +1,25 @@
+{
+  "levels": [
+    {
+      "id": 1,
+      "redTarget": 0,
+      "iceObjective": 0,
+      "powerTarget": 0,
+      "scoreTarget": 0
+    },
+    {
+      "id": 2,
+      "redTarget": 15,
+      "iceObjective": 5,
+      "powerTarget": 3,
+      "scoreTarget": 0
+    },
+    {
+      "id": 3,
+      "redTarget": 0,
+      "iceObjective": 0,
+      "powerTarget": 0,
+      "scoreTarget": 600
+    }
+  ]
+}

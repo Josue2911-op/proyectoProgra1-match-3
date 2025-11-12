@@ -2,6 +2,18 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Board.h"
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream>
+struct LevelData{
+	int redTarget;
+	int level;
+	int iceObjective;
+	int scoreTarget;
+	int powerTarget;
+};
+
 class Game {
 private:
 	Board* m = nullptr;
@@ -58,6 +70,9 @@ public:
 	sf::Text yourMoves(bool moved);
 	void createDataLevel(int level);
 	bool checkCompleted();
+	vector < LevelData> loadLevels(const string& file);
+	int levelMenu(sf::RenderWindow& levelMenu, const std::vector<LevelData>& levels, int lastCompleted);
+
 	sf::Text yourScore();
 	sf::Text objectivesText();
 	sf::Vector2i getMove()const {

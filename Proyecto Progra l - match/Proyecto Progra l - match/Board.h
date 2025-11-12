@@ -110,7 +110,6 @@ public:
 	void show(sf::RenderWindow& window);
 	void updateSprites();
 	void resetPoints();
-	void leaderBoard();
 
 	~Board() {
 		for (int i = 0; i < 8; i++) {
