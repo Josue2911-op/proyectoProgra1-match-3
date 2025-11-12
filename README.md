@@ -139,16 +139,16 @@ ProyectoProgra1-Match3/
  🖼️ Imágenes del Juego:
  -
 ### Ventana de selección de niveles  
-![Ventana de niveles](capturas de pantalla/selector.png)
+![Ventana de niveles](capturasdepantalla/selector.png)
 
 ### Juego en progreso  
-![Juego principal](capturas de pantalla/tablero.png)
+![Juego principal](capturasdepantalla/tablero.png)
 
 ### Ventana de resultados  
-![Ventana final](capturas de pantalla/pantallaFinal.png)
+![Ventana final](capturasdepantalla/pantallaFinal.png)
 
 ### Ventana de selección de niveles  
-![Ventana de clasificaciones](capturas de pantalla/clasificaciones.png)
+![Ventana de clasificaciones](capturasdepantalla/clasificaciones.png)
 
 Instrucciones de Instalación:
 -
