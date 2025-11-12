@@ -28,16 +28,124 @@ Objetivos del Proyecto
 
 -Practicar el uso de ramas y control de versiones con Git y GitHub.
 
+Estructura del Proyecto:
+-
+ProyectoProgra1-Match3/
+│
+├── README.md
+
+├── CHANGELOG.md
+
+├── documentacion proyecto match-3.pdf
+
+├── .git/
+
+│
+
+├── Capturas de pantalla/
+
+│   ├── pantallaFinal.png
+
+│   ├── clasificaciones.png
+
+│   ├── selector.png
+
+│   ├── UML.png
+
+│   └── tablero.png
+
+│
+
+├── ProyectoProgra1-Match3/
+
+│   ├── ProyectoProgra1-Match3.sln
+
+│   ├── x64/
+
+│   │   └── Debug/
+
+│   │       ├── ProyectoProgra1-Match3.exe
+
+│   │       ├── assets/
+
+│   │       │   ├── gem1.png
+
+│   │       │   ├── gem2.png
+
+│   │       │   ├── gem3.png
+
+│   │       │   ├── gem4.png
+
+│   │       │   ├── gem5.png
+
+│   │       │   ├── iceGem.png
+
+│   │       │   ├── powerGem.png
+
+│   │       │   ├── breakIce.png
+
+│   │       │   ├── levels.txt
+
+│   │       │   ├── LeaderBoard.txt
+
+│   │       │   └── BitcountGridDouble_Cursive-Regular.ttf
+
+│   │       ├── sfml-graphics-d-2.dll
+
+│   │       ├── sfml-system-d-2.dll
+
+│   │       ├── sfml-window-d-2.dll
+
+│   │       └── ...
+
+│   │
+
+│   ├── ProyectoProgra1-Match3/
+
+│   │   ├── src/
+
+│   │   │   ├── main.cpp
+
+│   │   │   ├── Game.cpp / Game.h
+
+│   │   │   ├── Board.cpp / Board.h
+
+│   │   │   ├── Gems.cpp / Gems.h
+
+│   │   │   ├── Ranking.cpp / Ranking.h
+
+│   │   │   └── ...
+
+│   │   |
+
+│   │   │── sfml-graphics-d-2.dll
+
+│   │   │── sfml-system-d-2.dll
+
+│   │   │── sfml-window-d-2.dll
+
+│   │   │── ...
+
+│   │   └── assets/ (igual que arriba)
+
+│   │
+
+│└── ...
+
+│
+
+└── ...
+
  🖼️ Imágenes del Juego:
  -
 ### Ventana de selección de niveles  
-![Ventana de niveles](capturasdepantalla/selector.png)
+![Ventana de niveles](capturas de pantalla/selector.png)
 
 ### Juego en progreso  
-![Juego principal](capturasdepantalla/tablero.png)
+![Juego principal](capturas de pantalla/tablero.png)
 
 ### Ventana de resultados  
-![Ventana final](capturasdepantalla/pantallaFinal.png)
+![Ventana final](capturas de pantalla/pantallaFinal.png)
 
 ### Ventana de selección de niveles  
 ![Ventana de clasificaciones](capturas de pantalla/clasificaciones.png)
