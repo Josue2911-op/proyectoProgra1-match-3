@@ -1,0 +1,23 @@
+v1.0 
+- Proyecto inicial con estructura de clases.
+- Implementación de la matriz de gemas y detección de combinaciones.
+- Se agregaron imágenes de las gemas.png.
+- Se añadió sistema de puntajes y contador de movimientos.
+- Sistema de gravedad e intercambio de gemas.
+
+v1.1 
+- Se añadió ventanas de inicio y final con botones interactivos.
+- Sistema de objetivos y puntaje por niveles.
+- Actualización en las imágenes.
+
+v1.2
+- Ventana final con opciones de reinicio o salida, siguiente nivel y texto Game Over y Level Complete.
+- Sistema de animaciones de intercambio.
+-Sistema de fade. 
+
+v1.3 
+- Se añadió sistema de niveles por archivo.
+- Se añadió sistema de ranking.
+- Se añadió ventanas utilizadas por el sistema de niveles y ranking.
+- Se añadió carpeta assets y carpeta imágenes.
+- Agregado README y documentación PDF.

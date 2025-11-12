@@ -118,6 +118,9 @@ public:
 		for (int i = 0; i < 8; i++) {
 				delete matrix[i];
 		} delete[]matrix;
-		
+		for (int i = 0; i < 8; i++) {
+			delete matrixG[i];
+		} delete[]matrixG;
+
 	}
 };
