@@ -28,6 +28,29 @@ Objetivos del Proyecto
 
 -Practicar el uso de ramas y control de versiones con Git y GitHub.
 
+ 🖼️ Imágenes del Juego:
+ -
+### Ventana de selección de niveles  
+![Ventana de niveles](capturasdepantalla/selector.png)
+
+### Juego en progreso  
+![Juego principal](capturasdepantalla/tablero.png)
+
+### Ventana de resultados  
+![Ventana final](capturasdepantalla/pantallaFinal.png)
+
+### Ventana de selección de niveles  
+![Ventana de clasificaciones](capturas de pantalla/clasificaciones.png)
+
 Instrucciones de Instalación:
 -
+1. Instalar **SFML 2.6** en tu entorno.
+2. Compilar el proyecto en **Visual Studio**.
+3. Ejecutar el archivo `.exe` generado.
+4. Seleccionar un nivel y jugar 🎮.
+
+Flujo de Clases:
+-
+### UML
+![UML](capturasdepantalla/UML.png)
 
