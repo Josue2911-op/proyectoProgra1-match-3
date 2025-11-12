@@ -345,9 +345,3 @@ void Board::gravity(){
 void Board:: resetPoints() {
 	points = 0;
 }
-
-void Board::leaderBoard() {
-
-
-}
-
